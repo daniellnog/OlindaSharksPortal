@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "OlindaSharks.Db", "LaefazDb\OlindaSharks.DB.sqlproj", "{393ED8E2-5406-4CF5-AB28-7D8CD75B5AF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OlindaSharksWeb", "LaefazWeb\OlindaSharksWeb.csproj", "{B76D5E5D-A2C6-4B99-B32C-A492BADF63C2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{393ED8E2-5406-4CF5-AB28-7D8CD75B5AF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{393ED8E2-5406-4CF5-AB28-7D8CD75B5AF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{393ED8E2-5406-4CF5-AB28-7D8CD75B5AF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{393ED8E2-5406-4CF5-AB28-7D8CD75B5AF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{393ED8E2-5406-4CF5-AB28-7D8CD75B5AF9}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{B76D5E5D-A2C6-4B99-B32C-A492BADF63C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B76D5E5D-A2C6-4B99-B32C-A492BADF63C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B76D5E5D-A2C6-4B99-B32C-A492BADF63C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B76D5E5D-A2C6-4B99-B32C-A492BADF63C2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {42594774-EDAF-4B8D-8526-FB65460F3E2B}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://toridesushi.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = LaefazWeb\\OlindaSharksWeb.csproj
+		SccProjectName1 = LaefazWeb
+		SccLocalPath1 = LaefazWeb
+		SccProjectUniqueName2 = LaefazDb\\OlindaSharks.Db.sqlproj
+		SccProjectName2 = LaefazDb
+		SccLocalPath2 = LaefazDb
+	EndGlobalSection
+EndGlobal

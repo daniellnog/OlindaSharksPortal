@@ -1,0 +1,50 @@
+﻿@model IEnumerable<OlindaSharksWeb.Models.Team>
+
+@{
+    ViewBag.Titulo = "Times";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form id="form-processar-analise">
+    <div class="box box-primary" id="panelCollapse">
+        <div class="box-body with-border">
+            <div class="form-group">
+                <table id="grid" class="display table table-bordered table-striped dataTable" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>
+                                Descrição
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description) 
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /.box -->
+</form>
+
+<!-- /.box -->
+@section scripts
+{
+    
+
+<script type="text/javascript" charset="utf-8">
+
+    $(document).ready(function () {
+            
+    });
+
+  
+</script>
+}

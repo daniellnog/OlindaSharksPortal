@@ -1,0 +1,501 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="OlindaSharksDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Month">
+          <Key>
+            <PropertyRef Name="IdMonth" />
+          </Key>
+          <Property Name="IdMonth" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MonthlyPayment">
+          <Key>
+            <PropertyRef Name="IdMonthlyPayment" />
+          </Key>
+          <Property Name="IdMonthlyPayment" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Value" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MonthYear">
+          <Key>
+            <PropertyRef Name="IdMonthYear" />
+          </Key>
+          <Property Name="IdMonthYear" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdMonthFk" Type="int" Nullable="false" />
+          <Property Name="IdYearFk" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Payment">
+          <Key>
+            <PropertyRef Name="IdPayment" />
+          </Key>
+          <Property Name="IdPayment" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdPlayerFk" Type="int" Nullable="false" />
+          <Property Name="IdMonthYearFk" Type="int" Nullable="false" />
+          <Property Name="IdMonthlyPaymentFk" Type="int" Nullable="false" />
+          <Property Name="PayDay" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Player">
+          <Key>
+            <PropertyRef Name="IdPlayer" />
+          </Key>
+          <Property Name="IdPlayer" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Nickname" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Cpf" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Rg" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="DateOfBorn" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Telephone" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ProfileFacebook" Type="varchar" MaxLength="100" />
+          <Property Name="ProfileInstagram" Type="varchar" MaxLength="100" />
+          <Property Name="Height" Type="varchar(max)" Nullable="false" />
+          <Property Name="Weight" Type="varchar(max)" Nullable="false" />
+          <Property Name="IdTeamFK" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SystemUser">
+          <Key>
+            <PropertyRef Name="IdSystemUser" />
+          </Key>
+          <Property Name="IdSystemUser" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Login" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DataInclusao" Type="datetime" Nullable="false" />
+          <Property Name="DataAtualizacao" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Team">
+          <Key>
+            <PropertyRef Name="IdTeam" />
+          </Key>
+          <Property Name="IdTeam" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Year">
+          <Key>
+            <PropertyRef Name="IdYear" />
+          </Key>
+          <Property Name="IdYear" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="char" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <Association Name="IdMonthFk">
+          <End Role="Month" Type="Self.Month" Multiplicity="1" />
+          <End Role="MonthYear" Type="Self.MonthYear" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Month">
+              <PropertyRef Name="IdMonth" />
+            </Principal>
+            <Dependent Role="MonthYear">
+              <PropertyRef Name="IdMonthFk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="IdMonthlyPaymentFk">
+          <End Role="MonthlyPayment" Type="Self.MonthlyPayment" Multiplicity="1" />
+          <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MonthlyPayment">
+              <PropertyRef Name="IdMonthlyPayment" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="IdMonthlyPaymentFk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="IdMonthYearFk">
+          <End Role="MonthYear" Type="Self.MonthYear" Multiplicity="1" />
+          <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MonthYear">
+              <PropertyRef Name="IdMonthYear" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="IdMonthYearFk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="IdPlayerFk">
+          <End Role="Player" Type="Self.Player" Multiplicity="1" />
+          <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="IdPlayer" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="IdPlayerFk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="IdTeamFK">
+          <End Role="Team" Type="Self.Team" Multiplicity="1" />
+          <End Role="Player" Type="Self.Player" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Team">
+              <PropertyRef Name="IdTeam" />
+            </Principal>
+            <Dependent Role="Player">
+              <PropertyRef Name="IdTeamFK" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="IdYearFk">
+          <End Role="Year" Type="Self.Year" Multiplicity="1" />
+          <End Role="MonthYear" Type="Self.MonthYear" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Year">
+              <PropertyRef Name="IdYear" />
+            </Principal>
+            <Dependent Role="MonthYear">
+              <PropertyRef Name="IdYearFk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="OlindaSharksDBModelStoreContainer">
+          <EntitySet Name="Month" EntityType="Self.Month" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MonthlyPayment" EntityType="Self.MonthlyPayment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MonthYear" EntityType="Self.MonthYear" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Player" EntityType="Self.Player" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SystemUser" EntityType="Self.SystemUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Team" EntityType="Self.Team" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Year" EntityType="Self.Year" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="IdMonthFk" Association="Self.IdMonthFk">
+            <End Role="Month" EntitySet="Month" />
+            <End Role="MonthYear" EntitySet="MonthYear" />
+          </AssociationSet>
+          <AssociationSet Name="IdMonthlyPaymentFk" Association="Self.IdMonthlyPaymentFk">
+            <End Role="MonthlyPayment" EntitySet="MonthlyPayment" />
+            <End Role="Payment" EntitySet="Payment" />
+          </AssociationSet>
+          <AssociationSet Name="IdMonthYearFk" Association="Self.IdMonthYearFk">
+            <End Role="MonthYear" EntitySet="MonthYear" />
+            <End Role="Payment" EntitySet="Payment" />
+          </AssociationSet>
+          <AssociationSet Name="IdPlayerFk" Association="Self.IdPlayerFk">
+            <End Role="Player" EntitySet="Player" />
+            <End Role="Payment" EntitySet="Payment" />
+          </AssociationSet>
+          <AssociationSet Name="IdTeamFK" Association="Self.IdTeamFK">
+            <End Role="Team" EntitySet="Team" />
+            <End Role="Player" EntitySet="Player" />
+          </AssociationSet>
+          <AssociationSet Name="IdYearFk" Association="Self.IdYearFk">
+            <End Role="Year" EntitySet="Year" />
+            <End Role="MonthYear" EntitySet="MonthYear" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OlindaSharksDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="OlindaSharksDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Month" EntityType="OlindaSharksDBModel.Month" />
+          <EntitySet Name="MonthlyPayment" EntityType="OlindaSharksDBModel.MonthlyPayment" />
+          <EntitySet Name="MonthYear" EntityType="OlindaSharksDBModel.MonthYear" />
+          <EntitySet Name="Payment" EntityType="OlindaSharksDBModel.Payment" />
+          <EntitySet Name="Player" EntityType="OlindaSharksDBModel.Player" />
+          <EntitySet Name="SystemUser" EntityType="OlindaSharksDBModel.SystemUser" />
+          <EntitySet Name="Team" EntityType="OlindaSharksDBModel.Team" />
+          <EntitySet Name="Year" EntityType="OlindaSharksDBModel.Year" />
+          <AssociationSet Name="IdMonthFk" Association="OlindaSharksDBModel.IdMonthFk">
+            <End Role="Month" EntitySet="Month" />
+            <End Role="MonthYear" EntitySet="MonthYear" />
+          </AssociationSet>
+          <AssociationSet Name="IdMonthlyPaymentFk" Association="OlindaSharksDBModel.IdMonthlyPaymentFk">
+            <End Role="MonthlyPayment" EntitySet="MonthlyPayment" />
+            <End Role="Payment" EntitySet="Payment" />
+          </AssociationSet>
+          <AssociationSet Name="IdMonthYearFk" Association="OlindaSharksDBModel.IdMonthYearFk">
+            <End Role="MonthYear" EntitySet="MonthYear" />
+            <End Role="Payment" EntitySet="Payment" />
+          </AssociationSet>
+          <AssociationSet Name="IdYearFk" Association="OlindaSharksDBModel.IdYearFk">
+            <End Role="Year" EntitySet="Year" />
+            <End Role="MonthYear" EntitySet="MonthYear" />
+          </AssociationSet>
+          <AssociationSet Name="IdPlayerFk" Association="OlindaSharksDBModel.IdPlayerFk">
+            <End Role="Player" EntitySet="Player" />
+            <End Role="Payment" EntitySet="Payment" />
+          </AssociationSet>
+          <AssociationSet Name="IdTeamFK" Association="OlindaSharksDBModel.IdTeamFK">
+            <End Role="Team" EntitySet="Team" />
+            <End Role="Player" EntitySet="Player" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Month">
+          <Key>
+            <PropertyRef Name="IdMonth" />
+          </Key>
+          <Property Name="IdMonth" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="MonthYear" Relationship="OlindaSharksDBModel.IdMonthFk" FromRole="Month" ToRole="MonthYear" />
+        </EntityType>
+        <EntityType Name="MonthlyPayment">
+          <Key>
+            <PropertyRef Name="IdMonthlyPayment" />
+          </Key>
+          <Property Name="IdMonthlyPayment" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Value" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Payment" Relationship="OlindaSharksDBModel.IdMonthlyPaymentFk" FromRole="MonthlyPayment" ToRole="Payment" />
+        </EntityType>
+        <EntityType Name="MonthYear">
+          <Key>
+            <PropertyRef Name="IdMonthYear" />
+          </Key>
+          <Property Name="IdMonthYear" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdMonthFk" Type="Int32" Nullable="false" />
+          <Property Name="IdYearFk" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Month" Relationship="OlindaSharksDBModel.IdMonthFk" FromRole="MonthYear" ToRole="Month" />
+          <NavigationProperty Name="Payment" Relationship="OlindaSharksDBModel.IdMonthYearFk" FromRole="MonthYear" ToRole="Payment" />
+          <NavigationProperty Name="Year" Relationship="OlindaSharksDBModel.IdYearFk" FromRole="MonthYear" ToRole="Year" />
+        </EntityType>
+        <EntityType Name="Payment">
+          <Key>
+            <PropertyRef Name="IdPayment" />
+          </Key>
+          <Property Name="IdPayment" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdPlayerFk" Type="Int32" Nullable="false" />
+          <Property Name="IdMonthYearFk" Type="Int32" Nullable="false" />
+          <Property Name="IdMonthlyPaymentFk" Type="Int32" Nullable="false" />
+          <Property Name="PayDay" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="MonthlyPayment" Relationship="OlindaSharksDBModel.IdMonthlyPaymentFk" FromRole="Payment" ToRole="MonthlyPayment" />
+          <NavigationProperty Name="MonthYear" Relationship="OlindaSharksDBModel.IdMonthYearFk" FromRole="Payment" ToRole="MonthYear" />
+          <NavigationProperty Name="Player" Relationship="OlindaSharksDBModel.IdPlayerFk" FromRole="Payment" ToRole="Player" />
+        </EntityType>
+        <EntityType Name="Player">
+          <Key>
+            <PropertyRef Name="IdPlayer" />
+          </Key>
+          <Property Name="IdPlayer" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Nickname" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Cpf" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Rg" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DateOfBorn" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Telephone" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ProfileFacebook" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ProfileInstagram" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Height" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Weight" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IdTeamFK" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Payment" Relationship="OlindaSharksDBModel.IdPlayerFk" FromRole="Player" ToRole="Payment" />
+          <NavigationProperty Name="Team" Relationship="OlindaSharksDBModel.IdTeamFK" FromRole="Player" ToRole="Team" />
+        </EntityType>
+        <EntityType Name="SystemUser">
+          <Key>
+            <PropertyRef Name="IdSystemUser" />
+          </Key>
+          <Property Name="IdSystemUser" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Login" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DataInclusao" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DataAtualizacao" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Team">
+          <Key>
+            <PropertyRef Name="IdTeam" />
+          </Key>
+          <Property Name="IdTeam" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Player" Relationship="OlindaSharksDBModel.IdTeamFK" FromRole="Team" ToRole="Player" />
+        </EntityType>
+        <EntityType Name="Year">
+          <Key>
+            <PropertyRef Name="IdYear" />
+          </Key>
+          <Property Name="IdYear" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="MonthYear" Relationship="OlindaSharksDBModel.IdYearFk" FromRole="Year" ToRole="MonthYear" />
+        </EntityType>
+        <Association Name="IdMonthFk">
+          <End Type="OlindaSharksDBModel.Month" Role="Month" Multiplicity="1" />
+          <End Type="OlindaSharksDBModel.MonthYear" Role="MonthYear" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Month">
+              <PropertyRef Name="IdMonth" />
+            </Principal>
+            <Dependent Role="MonthYear">
+              <PropertyRef Name="IdMonthFk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="IdMonthlyPaymentFk">
+          <End Type="OlindaSharksDBModel.MonthlyPayment" Role="MonthlyPayment" Multiplicity="1" />
+          <End Type="OlindaSharksDBModel.Payment" Role="Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MonthlyPayment">
+              <PropertyRef Name="IdMonthlyPayment" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="IdMonthlyPaymentFk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="IdMonthYearFk">
+          <End Type="OlindaSharksDBModel.MonthYear" Role="MonthYear" Multiplicity="1" />
+          <End Type="OlindaSharksDBModel.Payment" Role="Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MonthYear">
+              <PropertyRef Name="IdMonthYear" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="IdMonthYearFk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="IdYearFk">
+          <End Type="OlindaSharksDBModel.Year" Role="Year" Multiplicity="1" />
+          <End Type="OlindaSharksDBModel.MonthYear" Role="MonthYear" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Year">
+              <PropertyRef Name="IdYear" />
+            </Principal>
+            <Dependent Role="MonthYear">
+              <PropertyRef Name="IdYearFk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="IdPlayerFk">
+          <End Type="OlindaSharksDBModel.Player" Role="Player" Multiplicity="1" />
+          <End Type="OlindaSharksDBModel.Payment" Role="Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="IdPlayer" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="IdPlayerFk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="IdTeamFK">
+          <End Type="OlindaSharksDBModel.Team" Role="Team" Multiplicity="1" />
+          <End Type="OlindaSharksDBModel.Player" Role="Player" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Team">
+              <PropertyRef Name="IdTeam" />
+            </Principal>
+            <Dependent Role="Player">
+              <PropertyRef Name="IdTeamFK" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="OlindaSharksDBModelStoreContainer" CdmEntityContainer="OlindaSharksDBEntities">
+          <EntitySetMapping Name="Month">
+            <EntityTypeMapping TypeName="OlindaSharksDBModel.Month">
+              <MappingFragment StoreEntitySet="Month">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IdMonth" ColumnName="IdMonth" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MonthlyPayment">
+            <EntityTypeMapping TypeName="OlindaSharksDBModel.MonthlyPayment">
+              <MappingFragment StoreEntitySet="MonthlyPayment">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IdMonthlyPayment" ColumnName="IdMonthlyPayment" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MonthYear">
+            <EntityTypeMapping TypeName="OlindaSharksDBModel.MonthYear">
+              <MappingFragment StoreEntitySet="MonthYear">
+                <ScalarProperty Name="IdYearFk" ColumnName="IdYearFk" />
+                <ScalarProperty Name="IdMonthFk" ColumnName="IdMonthFk" />
+                <ScalarProperty Name="IdMonthYear" ColumnName="IdMonthYear" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Payment">
+            <EntityTypeMapping TypeName="OlindaSharksDBModel.Payment">
+              <MappingFragment StoreEntitySet="Payment">
+                <ScalarProperty Name="PayDay" ColumnName="PayDay" />
+                <ScalarProperty Name="IdMonthlyPaymentFk" ColumnName="IdMonthlyPaymentFk" />
+                <ScalarProperty Name="IdMonthYearFk" ColumnName="IdMonthYearFk" />
+                <ScalarProperty Name="IdPlayerFk" ColumnName="IdPlayerFk" />
+                <ScalarProperty Name="IdPayment" ColumnName="IdPayment" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Player">
+            <EntityTypeMapping TypeName="OlindaSharksDBModel.Player">
+              <MappingFragment StoreEntitySet="Player">
+                <ScalarProperty Name="IdTeamFK" ColumnName="IdTeamFK" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="Height" ColumnName="Height" />
+                <ScalarProperty Name="ProfileInstagram" ColumnName="ProfileInstagram" />
+                <ScalarProperty Name="ProfileFacebook" ColumnName="ProfileFacebook" />
+                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="DateOfBorn" ColumnName="DateOfBorn" />
+                <ScalarProperty Name="Rg" ColumnName="Rg" />
+                <ScalarProperty Name="Cpf" ColumnName="Cpf" />
+                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IdPlayer" ColumnName="IdPlayer" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SystemUser">
+            <EntityTypeMapping TypeName="OlindaSharksDBModel.SystemUser">
+              <MappingFragment StoreEntitySet="SystemUser">
+                <ScalarProperty Name="DataAtualizacao" ColumnName="DataAtualizacao" />
+                <ScalarProperty Name="DataInclusao" ColumnName="DataInclusao" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IdSystemUser" ColumnName="IdSystemUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Team">
+            <EntityTypeMapping TypeName="OlindaSharksDBModel.Team">
+              <MappingFragment StoreEntitySet="Team">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IdTeam" ColumnName="IdTeam" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Year">
+            <EntityTypeMapping TypeName="OlindaSharksDBModel.Year">
+              <MappingFragment StoreEntitySet="Year">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IdYear" ColumnName="IdYear" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

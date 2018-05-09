@@ -1,0 +1,325 @@
+﻿@model IEnumerable<LaefazWeb.Models.Pedido>
+
+@{
+    ViewBag.Titulo = "Pedidos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- /.box -->
+<div class="box box-default color-palette-box">
+    <button type="button" class="btn btn-primary" id="hiddenRemover" style="display: none;">Remover</button>
+    <div class="box-header">
+        <a href="@Url.Action("Adicionar", "Pedido")" class="btn btn-block btn-success pull-left" style="width: 100px;">Novo</a>
+        @*<input type="button" class="btn btn-block btn-info pull-right" style="width: 100px; margin-top: 0px; margin-right: 10px;" value="Editar" id="btnEditar" />*@
+        @*<input type="button" class="btn btn-block btn-default pull-right" style="width: 100px; margin-top: 0px; margin-right: 10px;" value="Excluir" id="btnExcluir" />*@
+    </div>
+    <div class="box-body">
+        <table id="grid" class="table table-bordered table-hover dataTable" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>
+                    </th>
+                    <th>
+                        Código do Pedido 
+                    </th>
+                    <th>
+                        Data do Pedido
+                    </th>
+                    <th>
+                        Tipo de Pagamento
+                    </th>
+                    <th>
+                        Cliente
+                    </th>
+                    <th>
+                        Ação
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.HiddenFor(modelItem => item.IdPedido, new { @class = "hidden-id" })
+                            @*@Html.DisplayFor(modelItem => item.Cliente.Nome)*@
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CodPedido)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DataPedido)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TipoPagamento.Descricao)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Cliente.Nome)
+                        </td>
+                        <td>
+                            @*@Html.DisplayFor(modelItem => item.Cliente.Nome)*@
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th rowspan="1" colspan="1"></th>
+                    <th rowspan="1" colspan="1">Código do Pedido</th>
+                    <th rowspan="1" colspan="1">Data do Pedido</th>
+                    <th rowspan="1" colspan="1">Tipo de Pagamento</th>
+                    <th rowspan="1" colspan="1">Cliente</th>
+                    <th rowspan="1" colspan="1">Ação</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+@section scripts
+{
+    <script type="text/javascript" charset="utf-8">
+
+        //function Remover(id) {
+
+        //    $("#Loading").show();
+        //    document.body.style.cursor = 'wait';
+        //    $.ajax({
+        //        url: "/Ambiente/Remover",
+        //        data: { id: id.toString() },
+        //        type: "POST",
+        //        async: true,
+        //        cache: false,
+        //        success: function (data) {
+
+        //            $.MessageBoxOK({
+        //                mensagem: data.Result,
+        //                argFuncao: data.Status,
+        //                funcaoBotaoOK: function (status) {
+        //                    if (status == 0)
+        //                        window.location = '/Ambiente/Index';
+        //                }
+        //            });
+
+        //            document.body.style.cursor = 'default';
+        //            $("#Loading").fadeOut();
+        //        },
+        //        error: function (data) {
+
+        //            if (data.Result == undefined) {
+        //                alert(data.responseText);
+        //            } else {
+        //                alert(data.Result);
+        //            }
+
+        //            document.body.style.cursor = 'default';
+        //            $("#Loading").fadeOut();
+        //        }
+        //    });
+        //}
+
+        function format(d) {
+
+            var div = $('<div id="produtos' + d[1] + '"' + '><div/>')
+            .addClass('loading')
+            .text('Loading...');
+
+            $.ajax({
+                url: '@Url.Action("GetProdutosPorPedido", "Pedido")',
+                data: { 'id': d[1] },
+                dataType: 'json',
+                success: function (json) {
+
+                    var $divProdutos = $('#produtos' + d[1]);
+                    var obj = JSON.parse(json);
+                    var html;
+                    var htmlBody = '';
+                    var htmlHead = '<div class="box">' +
+                    '<div class="box-header">' +
+                    '<h4 class="box-title">Produtos do Pedido</h4>' +
+                    '</div>' +
+                    '<div class="box-body no-padding">' +
+                    '<table class="table table-striped" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;margin-top:0px">' +
+                    '<tr>' +
+                    '<th width="10%">Código</th>' +
+                    '<th width="30%">Nome</th>' +
+                    '<th width="50%">Descrição</th>' +
+                    '<th width="10%">Valor</th>' +
+                    '</tr>';
+
+                    var total = 0;
+
+                    obj.forEach(function (o, index) {
+                        htmlBody += '<tr>' +
+                               '<td>' + o.IdProduto + '</td>' +
+                               '<td>' + o.Nome + '</td>' +
+                               '<td>' + o.Descricao + '</td>' +
+                               '<td>R$ ' + o.Valor + '</td>' +
+                               '</tr>'
+
+                        total += parseFloat(o.Valor);
+                    });
+
+                    htmlBody += '<tr>' +
+                               '<td>' + '</td>' +
+                               '<td>' + '</td>' +
+                               '<td>' + '</td>' +
+                               '<td><strong>R$ ' + total + '</strong></td>' +
+                               '</tr>';
+
+                    html = htmlHead + htmlBody + '</table></div></div>';
+
+                    $divProdutos.removeClass('loading');
+                    $divProdutos.html(html);
+
+                }
+            });
+
+            return div;
+        }
+
+        $(document).ready(function () {
+            $(".ul li").removeClass("active");
+            $('#Pedido').addClass('active');
+
+            //$("#btnEditar").click(function () {
+
+            //    var id = $('table.display:visible').find('tr.selected').find('input.hidden-id').map(function (idx, elem) {
+            //        return $(elem).val();
+            //    }).get();
+
+            //    if (id === "" || id.length <= 0) {
+            //        $.MessageBoxOK({ mensagem: "Nenhum Ambiente selecionado." });
+            //        return;
+            //    }
+
+            //    window.location = '/Ambiente/editar?id=' + id;
+            //});
+
+            //$('#btnExcluir').click(function () {
+
+            //    var id = $('table.display:visible').find('tr.selected').find('input.hidden-id').map(function (idx, elem) {
+            //        return $(elem).val();
+            //    }).get();
+
+            //    if (id === "" || id.length <= 0) {
+            //        $.MessageBoxOK({ mensagem: "Nenhum Ambiente selecionado." });
+            //        return;
+            //    }
+
+            //    $.MessageBoxSimNao({
+            //        titulo: "Remover Ambiente",
+            //        mensagem: "Confirma remoção do Ambiente?",
+            //        height: "auto",
+            //        width: "auto",
+            //        funcaoBotaoSim: function () {
+            //            Remover(id);
+            //        }
+            //    });
+            //});
+
+            var dt = $('#grid').DataTable({
+                columnDefs: [
+                    {
+                        "targets": 0,
+                        "class": "details-control",
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": "",
+                    },
+                    {
+                        targets: [0],
+                        sortable: false,
+                        width: '7%'
+                    },
+                    {
+                        targets: [1],
+                        sortable: true,
+                        width: '13%'
+                    },
+                    {
+                        targets: [2],
+                        sortable: true,
+                        width: '20%'
+                    },
+                    {
+                        targets: [3],
+                        sortable: true,
+                        width: '25%'
+                    },
+                     {
+                         targets: [4],
+                         sortable: true,
+                         width: '25%'
+                     },
+                    {
+                        "targets": -1,
+                        "data": null,
+                        "defaultContent":
+                        "<button id='btnEditar' class='btn btn-primary' style='margin-right:7px;'><i class='fa fa-edit'></i></button>" +
+                        "<button id='btnRemover' class='btn btn-warning'><i class='fa fa-remove'></i></button>"
+                    },
+                    {
+                        targets: [5],
+                        sortable: true,
+                        width: '10%'
+                    },
+                ],
+                order: [[1, "asc"]],
+                oLanguage: {
+                    "sEmptyTable": "Nenhum registro encontrado",
+                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ".",
+                    "sLengthMenu": "_MENU_ resultados por página",
+                    "sLoadingRecords": "Carregando...",
+                    "sProcessing": "Processando...",
+                    "sZeroRecords": "Nenhum registro encontrado",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": {
+                        "sNext": "Próximo",
+                        "sPrevious": "Anterior",
+                        "sFirst": "Primeiro",
+                        "sLast": "Último"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Ordenar colunas de forma ascendente",
+                        "sSortDescending": ": Ordenar colunas de forma descendente"
+                    }
+                }
+            });
+
+            //var table = $('#grid').DataTable();
+
+
+            // Array to track the ids of the details displayed rows
+            var detailRows = [];
+
+            $('#grid tbody').on('click', 'tr td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = dt.row(tr);
+                var idx = $.inArray(tr.attr('id'), detailRows);
+
+                if (row.child.isShown()) {
+                    tr.removeClass('details');
+                    row.child.hide();
+
+                    // Remove from the 'open' array
+                    detailRows.splice(idx, 1);
+                }
+                else {
+                    tr.addClass('details');
+                    row.child(format(row.data())).show();
+
+                    // Add to the 'open' array
+                    if (idx === -1) {
+                        detailRows.push(tr.attr('id'));
+                    }
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,9 @@
+﻿CREATE TABLE [dbo].[SystemUser]
+(
+	[IdSystemUser] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [Name] VARCHAR(50) NOT NULL, 
+    [Password] VARCHAR(50) NOT NULL, 
+    [Login] VARCHAR(50) NOT NULL, 
+    [DataInclusao] DATETIME NOT NULL DEFAULT GETDATE(),
+    [DataAtualizacao] DATETIME NOT NULL DEFAULT GETDATE() 
+)

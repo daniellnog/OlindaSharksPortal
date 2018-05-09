@@ -1,0 +1,368 @@
+﻿@using TDMWeb.Extensions
+@model IEnumerable<LaefazWeb.Models.DataPool>
+
+@{
+    ViewBag.Titulo = "DataPool";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    <style>
+        table.dataTable tbody tr {
+            cursor: pointer;
+        }
+    </style>
+}
+
+<form id="form-processar-tdm">
+    <div class="box box-primary" id="panelCollapse">
+        <div class="box-header with-border">
+            <h3 id="TDMProcessar" class="box-title">Projeto TDM</h3>
+        </div>
+        <div class="box-body with-border">
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.DropDownList("tdm_processar", new SelectList(ViewBag.ListaTDM, "Id", "Descricao"), "", new
+               {
+                   @class = "form-control",
+                   @id = "tdm-processar",
+                   @style = "width: 100%; padding-right: 12px; padding-left: 12px; border-right-width: 1px;",
+                   @onchange = "ProcessarTDM()",
+                   @required = "required"
+
+               })
+                </div>
+                @*@<div class="col-md-1" style="padding-left: 0px; padding-right: 0px;">
+                        <button type="submit" id="botaoProcessarTDM" class="btn btn-success" style="width: 100%">Processar</button>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+</form>
+<div class="box box-info">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-10" style="width: 100%;">
+                <!-- Custom Tabs (Pulled to the right) -->
+                <div class="nav-tabs-custom">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_1-1">
+                            <div class="form-group">
+                                <table id="grid" class="display table table-bordered table-striped dataTable" style="width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                @Html.DisplayName("Demanda")
+                                            </th>
+                                            <th>
+                                                @Html.DisplayName("Sistema")
+                                            </th>
+                                            <th>
+                                                @Html.DisplayName("Descrição DataPool")
+                                            </th>
+                                            <th>
+                                                @Html.DisplayName("Qtd Solicitada")
+                                            </th>
+                                            <th>
+                                                @Html.DisplayName("Qtd Disponível")
+                                            </th>
+                                            <th>
+                                                @Html.DisplayName("Qtd Reservada")
+                                            </th>
+                                            <th>
+                                                @Html.DisplayName("Qtd Utilizada")
+                                            </th>
+                                            <th>
+                                                @Html.DisplayName("Farol")
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- /.tab-pane -->
+                    </div>
+                    <!-- /.tab-content -->
+                </div>
+                <!-- nav-tabs-custom -->
+            </div>
+        </div>
+        <!-- /input-group -->
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+
+@section scripts
+{
+    <style>
+        /*Adicionar uma cor mais escura para destacar mais a linha*/
+        table.display tr.odd {
+            background-color: whitesmoke;
+        }
+    </style>
+
+    <script type="text/javascript" charset="utf-8">
+
+        $(document).ready(function () {
+
+            $(".ul li").removeClass("active");
+            $('#Produtos').addClass('active');
+
+            style = "top: -1px;right: -1px;";
+
+            $('#form-processar-tdm').validate();
+
+            $('#form-processar-tdm').on('submit', function (e) {
+                var isValid = $("#form-processar-tdm").valid();
+                if (isValid) {
+                    e.preventDefault();
+
+                    $("#grid").DataTable().draw();
+                }
+            });
+
+            var grid = $('#grid').DataTable({
+                "processing": true,
+                "serverSide": true,
+                ajax: {
+                    url: "@Url.Action("CarregarDataPool", "DataPool")",
+                    type: "POST",
+                    data: function (d) {
+                        return $.extend(d, {
+                            idTDM: $("#tdm-processar").val()
+                        });
+                    }
+                },
+                select: {
+                    style: 'os',
+                    selector: 'td:not(.column-desc-produto)'
+                },
+                columns: [
+                    {
+                        data: "DescricaoDemanda",
+                        name: "DescricaoDemanda",
+                        render: function (data, type, row) {
+                            if (type === 'display') {
+
+                                if (data !== null) {
+                                    return data;
+                                } else {
+                                    return '';
+                                }
+
+                                return '<div class="text-desc" name="Descricao">' + data + '</div>' +
+                                    ' <input type="hidden" class="hidden-produto-id" name="Id" value="' + row.Id + '" />';
+                            }
+
+                            return data;
+                        }
+                    },
+                    {
+                        data: "DescricaoSistema",
+                        name: "DescricaoSistema",
+                        render: function (data, type, row) {
+                            if (type === 'display') {
+                                return '<div class="text-desc-unificada" name="DescricaoSistema">' + data + '</div>';
+                            }
+
+                            return data;
+                        }
+                    },
+                    {
+                        data: "DescricaoDataPool",
+                        name: "DescricaoDataPool",
+                        render: function (data, type, row) {
+                            if (type === 'display') {
+                                return '<div class="text-desc-unificada" name="DescricaoDataPool">' + data + '</div>';
+                            }
+
+                            return data;
+                        }
+                    },
+                    {
+                        data: "QtdSolicitada",
+                        name: "QtdSolicitada",
+                        render: function (data, type, row) {
+                            if (type === 'display') {
+                                return data + ' <input type="hidden" class="hidden-unidade-id" name="IdUnidade" value="' + row.IdUnidade + '" />';
+                            }
+
+                            return data;
+                        }
+                    },
+                    {
+                        data: "QtdDisponivel",
+                        name: "QtdDisponivel",
+                        render: function (data, type, row) {
+                            if (type === 'display') {
+                                return data + ' <input type="hidden" class="hidden-unidade-id" name="IdUnidade" value="' + row.IdUnidade + '" />';
+                            }
+
+                            return data;
+                        }
+                    },
+                    {
+                        data: "QtdReservada",
+                        name: "QtdReservada",
+                        render: function (data, type, row) {
+                            if (type === 'display') {
+                                return data + ' <input type="hidden" class="hidden-unidade-id" name="IdUnidade" value="' + row.IdUnidade + '" />';
+                            }
+
+                            return data;
+                        }
+                    },
+                    {
+                        data: "QtdUtilizada",
+                        name: "QtdUtilizada",
+                        render: function (data, type, row) {
+                            if (type === 'display') {
+                                return data + ' <input type="hidden" class="hidden-unidade-id" name="IdUnidade" value="' + row.IdUnidade + '" />';
+                            }
+
+                            return data;
+                        }
+                    },
+                    {
+                        data: "Farol",
+                        name: "Farol",
+                        searchable: false,
+                        render: function (data, type, row) {
+                            if (type === 'display') {
+                                return '<div class="text-desc-unificada" name="DescricaoSistema">' + data + '</div>';
+                            }
+
+                            return data;
+                        }
+                    }
+                ],
+                "iDisplayLength": 50,
+                "aLengthMenu": [5, 50, 500, 1000, 10000],
+                columnDefs: [
+                    {
+                        targets: [0],
+                        sortable: true,
+                        width: '11%'
+                    },
+                    {
+                        targets: [1],
+                        sortable: true,
+                        width: '11%',
+                    },
+                    {
+                        targets: [2],
+                        sortable: true,
+                        width: '30%',
+                    },
+                    {
+                        targets: [3],
+                        sortable: true,
+                        width: '10%',
+                    },
+                    {
+                        targets: [4],
+                        sortable: true,
+                        width: '10%',
+                    },
+                    {
+                        targets: [5],
+                        sortable: true,
+                        width: '10%',
+                    },
+                    {
+                        targets: [6],
+                        sortable: true,
+                        width: '10%',
+                    },
+                    {
+                        targets: [7],
+                        sortable: false,
+                        width: '8%',
+                    }
+                ],
+                aoColumnDef: [
+                    null,
+                    { "sSortDataType": "dom-text", "sType": 'string' },
+                    null
+                ],
+                oLanguage: {
+                    select: {
+                        rows: {
+                            _: "%d linhas selecionadas",
+                            1: "1 linha selecionada"
+                        }
+                    },
+                    "sEmptyTable": "Nenhum registro encontrado",
+                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ".",
+                    "sLengthMenu": "_MENU_ resultados por página",
+                    "sLoadingRecords": "Carregando...",
+                    "sProcessing": $("#LoadingGrid").show(),
+                    "sZeroRecords": "Nenhum registro encontrado",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": {
+                        "sNext": "Próximo",
+                        "sPrevious": "Anterior",
+                        "sFirst": "Primeiro",
+                        "sLast": "Último"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Ordenar colunas de forma ascendente",
+                        "sSortDescending": ": Ordenar colunas de forma descendente"
+                    }
+                }
+            });
+
+
+
+            $("#tdm-processar").select2({
+                placeholder: "Selecione o projeto TDM que deseja processar...",
+                "language": {
+                    "noResults": function () {
+                        return "Nenhum resultado encontrado.";
+                    }
+                },
+                //allowClear: true
+            });
+
+            // Collapse Panel
+            @*$("#botaoProcessarTDM").click(function () {
+                var idTDM = $('#tdm-processar').val();
+                if (idTDM != undefined && idTDM != "") {
+                    $("#TDMProcessar").html("Projeto TDM: " + $("#select2-tdm-processar-container").attr("title"));
+                }
+            });*@
+
+
+
+        });
+
+
+        function ProcessarTDM() {
+
+            $.ajax(
+       {
+           url: '@Url.Action("Index", "DataPool")',
+           type: 'POST',
+           data: "",
+           contentType: 'application/text; charset=utf-8',
+           success: function () {
+
+               var idTDM = $('#tdm-processar').val();
+               if (idTDM != undefined && idTDM != "") {
+
+                   $("#TDMProcessar").html("Projeto TDM: " + $("#select2-tdm-processar-container").attr("title"));
+                   $("#grid").DataTable().draw();
+               }
+           },
+           error: function () {
+               alert("error");
+           }
+       });
+        }
+    </script>
+}

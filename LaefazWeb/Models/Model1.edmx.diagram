@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="a0fd53c7fb17404bbccf1bba2c3ba7ee" Name="Diagram1" ZoomLevel="112">
+        <EntityTypeShape EntityType="OlindaSharksDBModel.Month" Width="1.5" PointX="0.75" PointY="8.25" />
+        <EntityTypeShape EntityType="OlindaSharksDBModel.MonthlyPayment" Width="1.5" PointX="3" PointY="10.625" />
+        <EntityTypeShape EntityType="OlindaSharksDBModel.MonthYear" Width="1.5" PointX="3" PointY="6.75" />
+        <EntityTypeShape EntityType="OlindaSharksDBModel.Payment" Width="1.5" PointX="5.25" PointY="1.75" />
+        <EntityTypeShape EntityType="OlindaSharksDBModel.Player" Width="1.5" PointX="3" PointY="1" />
+        <EntityTypeShape EntityType="OlindaSharksDBModel.SystemUser" Width="1.5" PointX="5.75" PointY="5.75" />
+        <EntityTypeShape EntityType="OlindaSharksDBModel.Team" Width="1.5" PointX="0.75" PointY="2.125" />
+        <EntityTypeShape EntityType="OlindaSharksDBModel.Year" Width="1.5" PointX="0.75" PointY="5.875" />
+        <AssociationConnector Association="OlindaSharksDBModel.IdMonthFk" />
+        <AssociationConnector Association="OlindaSharksDBModel.IdMonthlyPaymentFk" />
+        <AssociationConnector Association="OlindaSharksDBModel.IdMonthYearFk" />
+        <AssociationConnector Association="OlindaSharksDBModel.IdYearFk" />
+        <AssociationConnector Association="OlindaSharksDBModel.IdPlayerFk" />
+        <AssociationConnector Association="OlindaSharksDBModel.IdTeamFK" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
