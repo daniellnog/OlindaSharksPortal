@@ -26,7 +26,7 @@ namespace TDMWeb.Controllers
             if (usuarioDB != null)
             {
                 Session["ObjUsuario"] = usuarioDB;
-                return RedirectToAction("Index", "Index");
+                return RedirectToAction("Index", "Payment");
             }
 
             ModelState.AddModelError("", "Credenciais inválidas");

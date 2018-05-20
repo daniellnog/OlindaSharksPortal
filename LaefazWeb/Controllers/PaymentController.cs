@@ -1,15 +1,15 @@
-﻿using OlindaSharksWeb.Models;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using TDMWeb.Extensions;
+using TDMWeb.Lib;
+using OlindaSharksWeb.Models;
 
-namespace OlindaSharksWeb.Controllers
+namespace LaefazWeb.Controllers
 {
-    public class SystemUserController : Controller
+    [UsuarioLogado]
+    public class PaymentController : Controller
     {
         private OlindaSharksDBEntities db = new OlindaSharksDBEntities();
 
@@ -17,7 +17,8 @@ namespace OlindaSharksWeb.Controllers
         {
             //PEGA O OBJETO COM O USUÁRIO QUE ESTÁ LOGADO
             SystemUser user = (SystemUser)Session["ObjUsuario"];
-            return View(db.SystemUser.ToList());
+            ViewBag.listaJogador = db.Player.ToList();
+            return View(db.Payment.ToList());
         }
 
         public ActionResult Adicionar()
@@ -25,12 +26,12 @@ namespace OlindaSharksWeb.Controllers
             return View();
         }
 
-        public ActionResult SalvarEdicao(SystemUser objeto)
+        public ActionResult SalvarEdicao(Payment objeto)
         {
             try
             {
                 Salvar(objeto, true);
-                this.FlashSuccess("Time editado com sucesso.");
+                this.FlashSuccess("Pagamento editado com sucesso.");
             }
             catch (Exception ex)
             {
@@ -39,11 +40,11 @@ namespace OlindaSharksWeb.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Salvar(SystemUser objeto, bool editar = false)
+        public ActionResult Salvar(Payment objeto, bool editar = false)
         {
             try
             {
-                SystemUser usuario;
+                Payment pagamento;
 
                 if (editar)
                 {
@@ -52,19 +53,15 @@ namespace OlindaSharksWeb.Controllers
                 }
                 else
                 {
-                    usuario = new SystemUser()
+                    pagamento = new Payment()
                     {
-                        Name = objeto.Name,
-                        Login = objeto.Login,
-                        Password = objeto.Password,
-                        DataInclusao = DateTime.Now,
-                        DataAtualizacao = DateTime.Now,
+                        
                     };
 
-                    db.SystemUser.Add(usuario);
+                    db.Payment.Add(pagamento);
                     db.SaveChanges();
 
-                    this.FlashSuccess("Usuário adicionado com sucesso.");
+                    this.FlashSuccess("Jogador adicionado com sucesso.");
                 }
             }
             catch (Exception ex)
@@ -80,21 +77,22 @@ namespace OlindaSharksWeb.Controllers
 
         public ActionResult Editar(int id)
         {
-            return View(db.SystemUser.FirstOrDefault(a => a.IdSystemUser == id));
+            return View(db.Payment.FirstOrDefault(a => a.IdPayment == id));
         }
 
+        [HttpPost]
         public ActionResult Remover(string id)
         {
             var result = new JsonResult() { JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-            int idTeam = Int32.Parse(id);
+            int idPagamento = Int32.Parse(id);
             try
             {
-                SystemUser usuario = db.SystemUser.SingleOrDefault(a => a.IdSystemUser == idTeam);
+                Payment pagamento = db.Payment.SingleOrDefault(a => a.IdPayment == idPagamento);
 
-                db.SystemUser.Remove(usuario);
+                db.Payment.Remove(pagamento);
                 db.SaveChanges();
 
-                result.Data = new { Result = "Usuário removido com sucesso.", Status = (int)WebExceptionStatus.Success };
+                result.Data = new { Result = "Pagamento removido com sucesso.", Status = (int)WebExceptionStatus.Success };
             }
             catch (Exception ex)
             {

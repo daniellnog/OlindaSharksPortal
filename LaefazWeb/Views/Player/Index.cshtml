@@ -9,7 +9,7 @@
     <div class="box box-primary" id="panelCollapse">
         <div class="box-header">
             <a href="@Url.Action("Adicionar", "Player")" class="btn btn-block btn-success pull-right" style="width: 100px;">Criar</a>
-            <input type="button" class="btn btn-block btn-info pull-right" style="width: 100px; margin-top: 0px; margin-right: 10px;" href="www.google.com" value="Editar" id="btnEditar" />
+            <input type="button" class="btn btn-block btn-info pull-right" style="width: 100px; margin-top: 0px; margin-right: 10px;" value="Editar" id="btnEditar" />
             <input type="button" class="btn btn-block btn-default pull-right" style="width: 100px; margin-top: 0px; margin-right: 10px;" value="Excluir" id="btnExcluir" />
         </div>
         <div class="box-body with-border">
@@ -17,9 +17,6 @@
                 <table id="grid" class="display table table-bordered table-striped dataTable" style="width: 100%;">
                     <thead>
                         <tr>
-                            <th>
-                                 
-                            </th>
                             <th>
                                 Nome
                             </th>
@@ -64,8 +61,6 @@
                         <tr>
                             <td>
                                 @Html.HiddenFor(modelItem => item.IdPlayer, new { @class = "hidden-id" })
-                            </td>
-                            <td>
                                 @Html.DisplayFor(modelItem => item.Name) 
                             </td>
                             <td>
@@ -122,9 +117,9 @@
         $('#grid').DataTable({
             columnDefs: [
                 {
-                    targets: [0],
-                    sortable: true,
-                    width: '100%'
+                    //targets: [0],
+                    //sortable: true,
+                    //width: '100%'
                 }
             ],
             order: [[0, "asc"]],

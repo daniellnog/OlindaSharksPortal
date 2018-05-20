@@ -1,15 +1,15 @@
-﻿@model IEnumerable<OlindaSharksWeb.Models.SystemUser>
+﻿@model IEnumerable<OlindaSharksWeb.Models.Payment>
 
 @{
-    ViewBag.Titulo = "Usuários";
+    ViewBag.Titulo = "Pagamentos";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <form id="form-processar-analise">
     <div class="box box-primary" id="panelCollapse">
         <div class="box-header">
-            <a href="@Url.Action("Adicionar", "SystemUser")" class="btn btn-block btn-success pull-right" style="width: 100px;">Criar</a>
-            <input type="button" class="btn btn-block btn-info pull-right" style="width: 100px; margin-top: 0px; margin-right: 10px;" value="Editar" id="btnEditar" />
+            <a href="@Url.Action("Adicionar", "Payment")" class="btn btn-block btn-success pull-right" style="width: 100px;">Criar</a>
+            @*<input type="button" class="btn btn-block btn-info pull-right" style="width: 100px; margin-top: 0px; margin-right: 10px;" value="Editar" id="btnEditar" />*@
             <input type="button" class="btn btn-block btn-default pull-right" style="width: 100px; margin-top: 0px; margin-right: 10px;" value="Excluir" id="btnExcluir" />
         </div>
         <div class="box-body with-border">
@@ -18,16 +18,16 @@
                     <thead>
                         <tr>
                             <th>
-                                Nome
+                                Jogador
                             </th>
                             <th>
-                                Login
+                                Mes/Ano
                             </th>
                             <th>
-                                Data de Inclusão
+                                Tipo do Pagamento
                             </th>
                             <th>
-                                Data de Atualização
+                                Dia do Pagamento
                             </th>
                         </tr>
                     </thead>
@@ -36,17 +36,24 @@
                         {
                         <tr>
                             <td>
-                                @Html.HiddenFor(modelItem => item.IdSystemUser, new { @class = "hidden-id" })
-                                @Html.DisplayFor(modelItem => item.Name) 
+                                @*@Html.HiddenFor(modelItem => item.IdPayment, new { @class = "hidden-id" })*@
+                                @Html.HiddenFor(modelItem => item.IdPlayerFk, new { Id = "idPlayer" })
+                                @Html.DropDownList("jogador", new SelectList(ViewBag.listaJogador, "IdPlayer", "Name"), "", new
+                                   {
+                                       @class = "form-control",
+                                       @id = "listaJogador",
+                                       @style = "width: 100%; padding-right: 12px; padding-left: 12px; border-right-width: 1px;",
+                                   }
+                                )
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Login)
+                                @Html.DisplayFor(modelItem => item.IdMonthYearFk) 
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.DataInclusao)
+                                @Html.DisplayFor(modelItem => item.IdMonthlyPaymentFk) 
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.DataAtualizacao)
+                                @Html.DisplayFor(modelItem => item.PayDay)
                             </td>
                         </tr>
                         }
@@ -110,7 +117,7 @@
                 table.$('tr.selected').removeClass('selected');
                 $(this).addClass('selected');
             }
-        });
+        }); 
     });
 
     function Remover(id) {
@@ -118,7 +125,7 @@
         $("#Loading").show();
         document.body.style.cursor = 'wait';
         $.ajax({
-            url: "/SystemUser/Remover",
+            url: "/Payment/Remover",
             data: { id: id.toString() },
             type: "POST",
             async: true,
@@ -130,7 +137,7 @@
                     argFuncao: data.Status,
                     funcaoBotaoOK: function (status) {
                         if (status == 0)
-                            window.location = '/SystemUser/Index';
+                            window.location = '/Payment/Index';
                     }
                 });
 
@@ -157,7 +164,7 @@
             return $(elem).val();
         }).get();
 
-        window.location = '/SystemUser/Editar?id=' + id;
+        window.location = '/Payment/Editar?id=' + id;
     });
 
     $('#btnExcluir').click(function () {
@@ -166,13 +173,13 @@
         }).get();
 
         if (id === "" || id.length <= 0) {
-            $.MessageBoxOK({ mensagem: "Nenhum Usuário selecionado." });
+            $.MessageBoxOK({ mensagem: "Nenhum Pagamento selecionado." });
             return;
         }
 
         $.MessageBoxSimNao({
-            titulo: "Remover Usuário?",
-            mensagem: "Confirma remoção do Usuário?",
+            titulo: "Remover Pagamento?",
+            mensagem: "Confirma remoção do Pagamento?",
             height: "auto",
             width: "auto",
             funcaoBotaoSim: function () {
@@ -180,5 +187,8 @@
             }
         });
     });
+
+    
+  
 </script>
 }
